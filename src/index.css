@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+:root {
+	font-family: "Poppins", "Segoe UI", sans-serif;
+}
+
+body {
+	margin: 0;
+}
