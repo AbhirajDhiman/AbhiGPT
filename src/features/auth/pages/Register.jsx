@@ -1,9 +1,24 @@
 import React from "react";
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 const Register = () => {
-  const handleSubmit = (e) => {
+  const { register, loading } = useAuth();
+  const navigate = useNavigate();
+  const [username, setUsername] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrorMessage("");
+
+    try {
+      await register(username, email, password);
+      navigate("/");
+    } catch (error) {
+      setErrorMessage(error?.response?.data?.message || "Registration failed. Please try again.");
+    }
   };
 
   return (
@@ -26,6 +41,8 @@ const Register = () => {
               type="text"
               id="username"
               name="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               placeholder="Enter your username"
               className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
               required
@@ -40,6 +57,8 @@ const Register = () => {
               type="email"
               id="email"
               name="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               placeholder="you@example.com"
               className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
               required
@@ -54,17 +73,24 @@ const Register = () => {
               type="password"
               id="password"
               name="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               placeholder="Create a strong password"
               className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
               required
             />
           </div>
 
+          {errorMessage ? (
+            <p className="rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">{errorMessage}</p>
+          ) : null}
+
           <button
             type="submit"
-            className="w-full rounded-xl bg-gradient-to-r from-emerald-600 to-cyan-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-200 transition hover:from-emerald-500 hover:to-cyan-500 focus:outline-none focus:ring-4 focus:ring-emerald-200"
+            disabled={loading}
+            className="w-full rounded-xl bg-linear-to-r from-emerald-600 to-cyan-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-200 transition hover:from-emerald-500 hover:to-cyan-500 focus:outline-none focus:ring-4 focus:ring-emerald-200"
           >
-            Create Account
+            {loading ? "Creating Account..." : "Create Account"}
           </button>
         </form>
 

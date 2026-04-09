@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:5000/api/auth",
+  baseURL: "http://localhost:3000/api/auth",
   withCredentials: true,
 });
 
@@ -44,7 +44,7 @@ export async function logout() {
 
 export async function getme() {
   try {
-    const response = await api.get("/current-user");
+    const response = await api.get("/getme");
     return response.data;
   } catch (error) {
     console.error("Fetch current user failed:", error);

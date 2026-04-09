@@ -1,9 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useAuth } from "../hooks/useauth";
-
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 const Login = () => {
   const { login, loading } = useAuth();
+  const navigate = useNavigate();
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [errorMessage, setErrorMessage] = React.useState("");
@@ -12,12 +14,28 @@ const Login = () => {
     e.preventDefault();
     setErrorMessage("");
 
+
     try {
       await login(email, password);
+      navigate("/");
     } catch (error) {
       setErrorMessage(error?.response?.data?.message || "Login failed. Please try again.");
     }
   };
+
+  if (loading) {
+    return (
+      <main className="relative flex min-h-screen items-center justify-center bg-slate-100 px-4 py-10">
+        <div className="h-52 w-52">
+          <DotLottieReact
+            src="https://lottie.host/6fb2a534-1374-40e7-9ffa-be643b514a45/5AGA3RKCyZ.lottie"
+            loop
+            autoplay
+          />
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-slate-100 px-4 py-10">
@@ -29,8 +47,7 @@ const Login = () => {
           <h1 className="text-3xl font-bold tracking-tight text-slate-900">Welcome Back</h1>
           <p className="mt-2 text-sm text-slate-600">Sign in to continue to your account</p>
         </div>
-
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-5"> 
           <div>
             <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-slate-700">
               Email Address
@@ -61,7 +78,8 @@ const Login = () => {
               id="password"
               name="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              // { Performing the 2 way binding for email and password }
+              onChange={(e) => setPassword(e.target.value)} 
               placeholder="Enter your password"
               className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100"
               required

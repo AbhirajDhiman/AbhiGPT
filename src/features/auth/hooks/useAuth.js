@@ -13,7 +13,7 @@ export const useAuth = () => {
         try{
             await login(email,password);
             const userData=await getme();
-            setUser(userData);
+            setUser(userData.user);
         }catch(err){
             console.error("Login failed:",err);
             throw err;
@@ -27,7 +27,7 @@ export const useAuth = () => {
         try{
             await register(username,email,password);
             const userData=await getme();
-            setUser(userData);
+            setUser(userData.user);
         }catch(err){
             console.error("Register failed:",err);
             throw err;
