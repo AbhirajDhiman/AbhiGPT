@@ -109,14 +109,18 @@ async function loginuser(req, res) {
 }
 
 async function logoutuser(req,res){
-    const{cookie}=req.cookies.token
+    try {
+        const token = req.cookies.token;
 
-    if(token){
-            await tokenblacklistmodel.create({token:cookie});
-            
+        if (token) {
+            await tokenblacklistmodel.create({ token });
         }
-        res.clearCookie("token",COOKIE_OPTIONS);
+
+        res.clearCookie("token", COOKIE_OPTIONS);
         return res.status(200).json({message:"User logged out successfully"});
+    } catch (error) {
+        return res.status(500).json({ message: "Internal server error" });
+    }
 }
 
 /**

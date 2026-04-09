@@ -21,7 +21,7 @@ authrouter.post("/login",authcontroller.loginuser);
 @access public
  */
 
-authrouter.get("/logout",authcontroller.logoutuser);
+authrouter.post("/logout",authcontroller.logoutuser);
 
 /**
  * @route GET /api/auth/profile
